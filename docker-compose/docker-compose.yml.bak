@@ -57,7 +57,7 @@ services:
     ports:
       - "8090:8090"
   share:
-    image: alfresco/alfresco-share:7.4.0-M2
+    image: docker.io/alfresco/alfresco-share:23.2.1
     mem_limit: 1g
     environment:
       REPO_HOST: "alfresco"
@@ -70,8 +70,6 @@ services:
         -Dalfresco.context=alfresco
         -Dalfresco.protocol=http
       CSRF_FILTER_REFERER: "https://cdox.cmcv.ac.in"
-      CSRF_FILTER_ORIGIN: "https://cdox.cmcv.ac.in"
-      USE_SSL: "true"
   postgres:
     image: postgres:14.4
     mem_limit: 512m
@@ -130,18 +128,15 @@ services:
       DISABLE_ADW: "true"
       ENABLE_CONTENT_APP: "true"
       USE_SSL: "true"
-      DOMAIN: "cdox.cmcv.ac.in"
+      DOMAIN: "cdox.cmcv.ac.in" # when USE_SSL="true"
     depends_on:
       - alfresco
       - content-app
       - control-center
     ports:
-      - "443:443"
       - "8080:8080"
     links:
       - content-app
       - alfresco
       - share
       - control-center
-    volumes:
-      - ${PWD}/ssl2/:/etc/nginx/ssl/
